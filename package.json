@@ -1,0 +1,32 @@
+{
+  "name": "prototype",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev",
+    "build": "next build",
+    "prod_start": "NODE_ENV=production node server.js",
+    "start": "next start",
+    "prod": "next export"
+  },
+  "author": "Hrishi",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "ganache-cli": "^6.6.0",
+    "ipfs-api": "^26.1.2",
+    "mocha": "^6.2.0",
+    "next": "^4.1.4",
+    "next-routes": "^1.4.2",
+    "now": "^16.3.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "semantic-ui-react": "^0.88.0",
+    "solc": "^0.4.26",
+    "text-encoding": "^0.7.0",
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "^1.2.1"
+  }
+}
