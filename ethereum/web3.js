@@ -15,4 +15,6 @@ else {
     web3 = new Web3(provider);
 }
 
+// "test": "echo \"Error: no test specified\" && exit 1",
+
 export default web3;

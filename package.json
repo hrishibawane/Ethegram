@@ -1,15 +1,15 @@
 {
+  "homepage": "./",
   "name": "prototype",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next dev",
+    "test": "mocha",
+    "dev": "next",
     "build": "next build",
-    "prod_start": "NODE_ENV=production node server.js",
     "start": "next start",
-    "prod": "next export"
+    "export": "next export"
   },
   "author": "Hrishi",
   "license": "ISC",
@@ -22,11 +22,16 @@
     "next-routes": "^1.4.2",
     "now": "^16.3.1",
     "react": "^16.9.0",
+    "react-countup": "^4.3.3",
     "react-dom": "^16.9.0",
     "semantic-ui-react": "^0.88.0",
     "solc": "^0.4.26",
+    "swearjar": "^0.2.0",
     "text-encoding": "^0.7.0",
     "truffle-hdwallet-provider": "0.0.3",
-    "web3": "^1.2.1"
+    "web3": "^1.0.0-beta.35"
+  },
+  "devDependencies": {
+    "uglifyjs-webpack-plugin": "^2.2.0"
   }
 }

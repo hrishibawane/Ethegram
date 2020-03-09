@@ -8,7 +8,7 @@ import { List, Icon } from "semantic-ui-react";
 class UserIndex extends Component {
   state = {
     users: []
-  };
+  }
 
   async componentDidMount() {
     const userCount = await social.methods.userCount().call();

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Form, Button, Input, Image } from "semantic-ui-react";
+import { Form, Button, Input, Image, Message } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import social from "../../ethereum/social";
 import web3 from "../../ethereum/web3";
 import ipfs from "../../ethereum/ipfs";
-import {Router} from "../../routes";
+import { Router } from "../../routes";
+var swearjar = require("swearjar");
 
 class NewPost extends Component {
   state = {
@@ -13,7 +14,9 @@ class NewPost extends Component {
     imgBuffer: null,
     imgIpfsHash: "",
     selectedImage: "",
-    loading: false
+    loading: false,
+    errMessage: "",
+    err: false
   };
 
   onSubmit = async event => {
@@ -21,7 +24,7 @@ class NewPost extends Component {
 
     const { description, caption } = this.state;
 
-    this.setState({ loading: true });
+    this.setState({ loading: true, errMessage: "" });
 
     try {
       const accs = await web3.eth.getAccounts();
@@ -39,13 +42,18 @@ class NewPost extends Component {
 
       await social.methods
         .createPost(caption, description, this.state.imgIpfsHash, timestamp)
-        .send({ from: accs[0] });
+        .send({
+          from: accs[0],
+          value: web3.utils.toWei("0.01", "ether")
+        });
 
       console.log(this.state.imgIpfsHash);
-    } catch (err) {}
+      Router.pushRoute("/");
+    } catch (err) {
+      this.setState({ err: true, errMessage: err.message });
+    }
 
     this.setState({ loading: false });
-    Router.pushRoute('/');
   };
 
   captureFile = event => {
@@ -95,6 +103,13 @@ class NewPost extends Component {
             onChange={event =>
               this.setState({ description: event.target.value })
             }
+          />
+
+          <Message
+            error
+            header="Oops!"
+            visible={this.state.err}
+            content={this.state.errMessage}
           />
 
           <Button loading={this.state.loading} primary>
