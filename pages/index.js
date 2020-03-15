@@ -15,6 +15,8 @@ import social from "../ethereum/social";
 import web3 from "../ethereum/web3";
 import { Link, Router } from "../routes";
 import ipfs from "../ethereum/ipfs";
+const NewsAPI = require("newsapi");
+const newsapi = new NewsAPI("9596f3ac23f5400a981fa2a3e2f8411b");
 
 class SocialIndex extends Component {
   state = {
@@ -28,8 +30,11 @@ class SocialIndex extends Component {
     loading: false,
     name: "",
     index: 0,
-    username: "",
-    done: false
+    username: "unknown",
+    done: false,
+    modal: false,
+    articles: [],
+    news: []
   };
 
   onSubmit = async index => {
@@ -65,7 +70,6 @@ class SocialIndex extends Component {
     });
 
     const postCount = await social.methods.getPostsCount().call();
-
     const posts = await Promise.all(
       Array(parseInt(postCount))
         .fill()
@@ -77,6 +81,17 @@ class SocialIndex extends Component {
     this.setState({ posts: posts, postCount: postCount });
 
     this.renderPosts();
+
+    newsapi.v2
+      .topHeadlines({
+        language: "en",
+        country: "in"
+      })
+      .then(response => {
+        console.log(response.articles);
+        this.setState({ articles: response.articles });
+        this.renderArticles();
+      });
   }
 
   likePost = async index => {
@@ -108,12 +123,28 @@ class SocialIndex extends Component {
     this.setState({ loading: false, disabled: true });
   };
 
+  renderArticles = () => {
+    const articles = this.state.articles;
+
+    const news = articles.map((article, index) => {
+      return {
+        key: index,
+        header: <h4>{article.title}</h4>,
+        description: <p>{article.description}</p>,
+        extra: <a href={article.url} target="_blank">{article.url}</a>,
+        fluid: true
+      };
+    });
+
+    this.setState({ news: news });
+  };
+
   renderPosts = async () => {
     const posts = this.state.posts;
 
     const items = await Promise.all(
       posts.map(async (post, index) => {
-        // const name = await social.methods.getUsername(post.owner).call();
+        const name = await social.methods.getUserDetails(post.owner).call();
         let src;
         if (post.imgIpfsHash.length > 0) {
           const data = await ipfs.files.get(post.imgIpfsHash);
@@ -127,8 +158,11 @@ class SocialIndex extends Component {
           key: index,
           header: (
             <div>
-              <h3 style={{ fontSize: "20px" }}>{post.caption}</h3>
-              <h5>{this.state.username}</h5>
+              <h4 style={{ marginBottom: "0px" }}>{name[0]}</h4>
+              <p style={{ color: "grey", marginTop: "0px" }}>
+                {post.timestamp}
+              </p>
+              <h3>{post.caption}</h3>
             </div>
           ),
           description: (
@@ -144,11 +178,10 @@ class SocialIndex extends Component {
               />
             </div>
           ),
-          meta: <p style={{ color: "grey" }}>{post.timestamp}</p>,
           extra: (
             <div>
               <Form onSubmit={() => this.onSubmit(index)}>
-                <Form.Field inline >
+                <Form.Field inline>
                   <Input
                     focus
                     placeholder="Add a comment..."
@@ -156,11 +189,15 @@ class SocialIndex extends Component {
                     onChange={event =>
                       this.setState({ newComment: event.target.value })
                     }
-                    style={{ width: "70%", height:"40px" }}
+                    style={{ width: "70%", height: "40px", marginRight: "0px" }}
                   />
-                  <Button size="medium" color="linkedin" style={{ height: "40px" }} inverted>
-                    Post Comment
-                  </Button>
+                  <Button
+                    size="small"
+                    color="linkedin"
+                    content="Post Comment"
+                    icon="edit"
+                    style={{ height: "40px" }}
+                  />
                 </Form.Field>
               </Form>
               <br></br>
@@ -169,14 +206,18 @@ class SocialIndex extends Component {
                 color="red"
                 content="Like"
                 icon="heart"
-                size="small"
+                size="medium"
                 label={{ basic: true, color: "red", content: post.likes }}
               />
               <Modal
                 trigger={
-                  <Button size="small" primary>
-                    View Comments
-                  </Button>
+                  <Button
+                    size="medium"
+                    color="facebook"
+                    content="View Comments"
+                    icon="comments"
+                    onClick={() => this.setState({ modal: true })}
+                  />
                 }
                 size="small"
               >
@@ -185,9 +226,13 @@ class SocialIndex extends Component {
                   <List divided items={post.comments.split("/")}></List>
                 </Modal.Content>
                 <Modal.Actions>
-                  <Button color="green" inverted>
-                    Close
-                  </Button>
+                  <Button
+                    color="red"
+                    content="Close"
+                    icon="close"
+                    inverted
+                    onClick={() => this.setState({ modal: false })}
+                  />
                 </Modal.Actions>
               </Modal>
             </div>
@@ -205,11 +250,20 @@ class SocialIndex extends Component {
       <Layout>
         <h2>Posts</h2>
         <Grid>
-          <Grid.Column width={12}>
+          <Grid.Column width={11} style={{ marginRight:"10px", paddingRight: "20px" }}>
             <Card.Group centered items={this.state.items} />
           </Grid.Column>
 
-          <Grid.Column width={4} textAlign="left">
+          <Grid.Column
+            width={4}
+            textAlign="left"
+            style={{
+              marginLeft: "40px",
+              marginTop: "15px",
+              border: "1px solid #A9A9A9",
+              borderRadius: "5px"
+            }}
+          >
             <Form>
               <Form.Input
                 disabled={this.state.disabled}
@@ -219,28 +273,46 @@ class SocialIndex extends Component {
                 onChange={event => this.setState({ name: event.target.value })}
               />
               <Button
+                size="medium"
+                content="Sign In"
                 onClick={this.signIn}
-                style={{ backgroundColor: "#003152", color: "#FFF" }}
+                style={{
+                  backgroundColor: "#003152",
+                  color: "#FFF",
+                  width: "100%"
+                }}
                 disabled={this.state.disabled}
                 loading={this.state.loading}
-              >
-                Sign In
-              </Button>
+              />
             </Form>
 
-            <br></br>
-            <br></br>
+            <br />
+            <Link route="/profile">
+              <a><h4>Signed in as {this.state.username}</h4></a>
+            </Link>
+            <br />
             <Link route="/posts/new">
               <a>
                 <Button
+                  content="Create New Post"
                   size="medium"
-                  style={{ backgroundColor: "#003152", color: "#FFF" }}
+                  style={{
+                    backgroundColor: "#003152",
+                    color: "#FFF",
+                    width: "100%"
+                  }}
                   disabled={!this.state.disabled}
-                >
-                  Create New Post
-                </Button>
+                />
               </a>
             </Link>
+            <br />
+            <br />
+            <hr />
+            <h3>News Updates</h3>
+            <p style={{ color: "grey", marginTop: "0px" }}>
+              Powered by newsapi.org...
+            </p>
+            <Card.Group items={this.state.news} />
           </Grid.Column>
         </Grid>
       </Layout>

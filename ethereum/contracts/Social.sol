@@ -28,6 +28,7 @@ contract Social {
     User[] public peeps;
     string public chatHash;
 
+
     constructor() public {
         manager = msg.sender;
         userCount = 0;

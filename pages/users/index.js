@@ -8,7 +8,7 @@ import { List, Icon } from "semantic-ui-react";
 class UserIndex extends Component {
   state = {
     users: []
-  }
+  };
 
   async componentDidMount() {
     const userCount = await social.methods.userCount().call();
@@ -26,15 +26,41 @@ class UserIndex extends Component {
 
   getUsers = () => {
     return this.state.users.map((user, index) => {
+      let score = 0;
+      if (user.postsCount != 0) {
+        score = user.tokens / user.postsCount;
+      }
       return (
-        <List.Item key={index}>
-          <List.Icon name="user" size="big" />
+        <List.Item
+          key={index}
+          style={{
+            borderRadius: "10px",
+            marginBottom: "10px",
+            backgroundColor: "#81D8D0",
+            padding: "20px"
+          }}
+        >
+          <List.Icon name="user circle" size="huge" />
           <List.Content>
-            <List.Header>{user.name}</List.Header>
-            <List.Description>{user.uadd}</List.Description>
+            <List.Header
+              style={{
+                fontSize: "22px",
+                margin: "5px",
+                marginBottom: "10px",
+                color: "#003152"
+              }}
+            >
+              {user.name}
+            </List.Header>
+            <List.Description
+              style={{ fontSize: "16px", marginLeft: "5px", color: "#003152" }}
+            >
+              <div>
+                <p>{user.uadd}</p>
+                <p>Score: {score}</p>
+              </div>
+            </List.Description>
           </List.Content>
-          
-          <hr />
         </List.Item>
       );
     });

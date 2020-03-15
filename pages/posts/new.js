@@ -40,14 +40,14 @@ class NewPost extends Component {
         this.setState({ imgIpfsHash: ipfsHash[0].hash });
       }
 
-      await social.methods
+      const th = await social.methods
         .createPost(caption, description, this.state.imgIpfsHash, timestamp)
         .send({
           from: accs[0],
           value: web3.utils.toWei("0.01", "ether")
         });
 
-      console.log(this.state.imgIpfsHash);
+      console.log(th.transactionHash);
       Router.pushRoute("/");
     } catch (err) {
       this.setState({ err: true, errMessage: err.message });
