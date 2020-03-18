@@ -15,6 +15,7 @@ import social from "../ethereum/social";
 import web3 from "../ethereum/web3";
 import { Link, Router } from "../routes";
 import ipfs from "../ethereum/ipfs";
+import COLORS from "../colors";
 const NewsAPI = require("newsapi");
 const newsapi = new NewsAPI("9596f3ac23f5400a981fa2a3e2f8411b");
 
@@ -130,9 +131,10 @@ class SocialIndex extends Component {
       return {
         key: index,
         header: <h4>{article.title}</h4>,
-        description: <p>{article.description}</p>,
-        extra: <a href={article.url} target="_blank">{article.url}</a>,
-        fluid: true
+        description: <p style={{fontSize:"15px"}}>{article.description}</p>,
+        extra: <a href={article.url} target="_blank" style={{color:"blue"}}>{article.url}</a>,
+        fluid: true,
+        style: {backgroundColor: COLORS.background}
       };
     });
 
@@ -261,14 +263,16 @@ class SocialIndex extends Component {
               marginLeft: "40px",
               marginTop: "15px",
               border: "1px solid #A9A9A9",
-              borderRadius: "5px"
+              borderRadius: "5px",
+              backgroundColor: COLORS.white
             }}
           >
-            <Form>
+            <Form style={{backgroundColor: COLORS.background, padding:"10px", border: "1px solid #A9A9A9"}}>
+              <label><h4 style={{color:COLORS.menuBackground}}>Name:</h4></label>
               <Form.Input
+                style={{ marginTop:"5px" }}
                 disabled={this.state.disabled}
                 fluid
-                label="Name"
                 value={this.state.name}
                 onChange={event => this.setState({ name: event.target.value })}
               />
@@ -277,8 +281,8 @@ class SocialIndex extends Component {
                 content="Sign In"
                 onClick={this.signIn}
                 style={{
-                  backgroundColor: "#003152",
-                  color: "#FFF",
+                  backgroundColor: COLORS.menuBackground,
+                  color: COLORS.menuText,
                   width: "100%"
                 }}
                 disabled={this.state.disabled}
@@ -288,7 +292,7 @@ class SocialIndex extends Component {
 
             <br />
             <Link route="/profile">
-              <a><h4>Signed in as {this.state.username}</h4></a>
+              <a style={{color:COLORS.menuBackground}}><h4>Signed in as {this.state.username}</h4></a>
             </Link>
             <br />
             <Link route="/posts/new">
@@ -297,8 +301,8 @@ class SocialIndex extends Component {
                   content="Create New Post"
                   size="medium"
                   style={{
-                    backgroundColor: "#003152",
-                    color: "#FFF",
+                    backgroundColor: COLORS.menuBackground,
+                    color: COLORS.menuText,
                     width: "100%"
                   }}
                   disabled={!this.state.disabled}
@@ -308,9 +312,9 @@ class SocialIndex extends Component {
             <br />
             <br />
             <hr />
-            <h3>News Updates</h3>
-            <p style={{ color: "grey", marginTop: "0px" }}>
-              Powered by newsapi.org...
+            <h3 style={{marginBottom:"0px", color:COLORS.menuBackground}}>News Updates</h3>
+            <p style={{ color:"grey", marginBottom: "20px" }}>
+              Powered by newsapi.org
             </p>
             <Card.Group items={this.state.news} />
           </Grid.Column>

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import Layout from "../../components/Layout";
-import { Form, Button, List } from "semantic-ui-react";
+import { Form, Button, List, Container } from "semantic-ui-react";
 import ipfs from "../../ethereum/ipfs";
 import social from "../../ethereum/social";
 import web3 from "../../ethereum/web3";
 import { Router } from "../../routes";
+import COLORS from "../../colors";
 
 class ChatRoom extends Component {
   state = {
@@ -20,8 +21,8 @@ class ChatRoom extends Component {
 
   async componentDidMount() {
     const accs = await web3.eth.getAccounts();
-    const username = await social.methods.getUsername(accs[0]).call();
-    this.setState({ currAcc: accs[0], username: username });
+    const username = await social.methods.getUserDetails(accs[0]).call();
+    this.setState({ currAcc: accs[0], username: username[0] });
 
     const hash = await social.methods.chatHash().call();
     if (hash.length > 0) {
@@ -44,17 +45,21 @@ class ChatRoom extends Component {
           <div
             style={{
               width: "fit-content",
-              border: "2px solid lightblue",
+              border: "1px solid",
+              borderColor: COLORS.menuBackground,
               margin: "5px",
-              padding: "8px",
-              backgroundColor: "lightblue",
-              borderRadius: "5px"
+              padding: "10px",
+              paddingRight: "50px",
+              backgroundColor: COLORS.white,
+              borderRadius: "10px",
+              color: COLORS.menuBackground
             }}
           >
             <b>{str[0]}</b>
             <p>{str[1]}</p>
           </div>
-        )
+        ),
+        backgroundColor: COLORS.ddbackground
       };
     });
     return items;
@@ -86,24 +91,28 @@ class ChatRoom extends Component {
   render() {
     return (
       <Layout>
-        <h3>Chat Room</h3>
-        <hr></hr>
-        <br></br>
-        <List items={this.state.items}></List>
-        <Form onSubmit={() => this.onSend()}>
-          <Form.Input
-            fluid
-            placeholder="Write your message..."
-            value={this.state.currmsg}
-            onChange={event => this.setState({ currmsg: event.target.value })}
-          />
-          <Button
-            icon="send"
-            color="green"
-            content="Send"
-            loading={this.state.loading}
-          ></Button>
-        </Form>
+        <Container>
+          <h3>Chat Room</h3>
+          <hr></hr>
+          <List items={this.state.items}></List>
+          <Form onSubmit={() => this.onSend()}>
+            <Form.Input
+              fluid
+              placeholder="Write your message..."
+              value={this.state.currmsg}
+              onChange={event => this.setState({ currmsg: event.target.value })}
+            />
+            <Button
+              icon="send"
+              style={{
+                backgroundColor: COLORS.menuBackground,
+                color: COLORS.menuText
+              }}
+              content="Send"
+              loading={this.state.loading}
+            ></Button>
+          </Form>
+        </Container>
       </Layout>
     );
   }

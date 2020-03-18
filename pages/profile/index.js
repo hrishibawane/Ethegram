@@ -14,6 +14,7 @@ import web3 from "../../ethereum/web3";
 import ipfs from "../../ethereum/ipfs";
 import { Router } from "../../routes";
 import CountUp from "react-countup";
+import COLORS from "../../colors";
 
 class Profile extends Component {
   state = {
@@ -73,10 +74,26 @@ class Profile extends Component {
   render() {
     return (
       <Layout>
+        <Container>
         <br></br>
         <center>
-          <h1 style={{ color:"#003152", fontSize: "50px" }}>{this.state.username}</h1>
-          <p style={{ color:"#003152", fontSize: "15px" }}>{this.state.useraddress}</p>
+          <h1 style={{ color: COLORS.menuBackground, fontSize: "50px" }}>
+            {this.state.username}
+          </h1>
+          <div
+            style={{
+              backgroundColor: COLORS.divBackground,
+              padding: "10px",
+              width: "500px",
+              borderRadius: "20px",
+              border:"1px solid",
+              borderColor:COLORS.menuBackground
+            }}
+          >
+            <p style={{ color: COLORS.menuBackground, fontWeight:"bold", fontSize: "15px" }}>
+              {this.state.useraddress}
+            </p>
+          </div>
         </center>
         <br />
         <br />
@@ -91,8 +108,10 @@ class Profile extends Component {
                   padding: "20px",
                   height: "100%",
                   borderRadius: "50px",
-                  backgroundColor: "#003152",
-                  color: "#81D8D0"
+                  backgroundColor: COLORS.menuBackground,
+                  color: COLORS.menuText,
+                  border: "2px solid",
+                  borderColor: COLORS.divBackground
                 }}
               >
                 <center>
@@ -118,8 +137,10 @@ class Profile extends Component {
                   padding: "20px",
                   height: "100%",
                   borderRadius: "50px",
-                  backgroundColor: "#81D8D0",
-                  color: "#003152"
+                  backgroundColor: COLORS.divBackground,
+                  color: COLORS.menuBackground,
+                  border: "2px solid",
+                  borderColor: COLORS.menuBackground
                 }}
               >
                 <center>
@@ -148,8 +169,10 @@ class Profile extends Component {
                   padding: "20px",
                   height: "100%",
                   borderRadius: "50px",
-                  backgroundColor: "#81D8D0",
-                  color: "#003152"
+                  backgroundColor: COLORS.divBackground,
+                  color: COLORS.menuBackground,
+                  border: "2px solid",
+                  borderColor: COLORS.menuBackground
                 }}
               >
                 <center>
@@ -177,10 +200,13 @@ class Profile extends Component {
                   padding: "20px",
                   height: "100%",
                   borderRadius: "50px",
-                  backgroundColor: "#003152",
-                  color: "#81D8D0"
+                  backgroundColor: COLORS.menuBackground,
+                  color: COLORS.menuText,
+                  border: "2px solid",
+                  borderColor: COLORS.divBackground
                 }}
               >
+                
                 <center>
                   <h1 style={{ fontSize: "40px" }}>Account Balance</h1>
                   <br />
@@ -208,14 +234,16 @@ class Profile extends Component {
         <hr />
         <br />
 
-        <h1 style={{color:"#003152"}}>Redeem Tokens</h1>
-        <p style={{ color:"#003152", fontSize: "15px" }}>
+        <h1 style={{ color: COLORS.menuBackground }}>Redeem Tokens</h1>
+        <p style={{ color: COLORS.menuBackground, fontSize: "15px" }}>
           (Note: Tokens can be redeemed if tokens are greater than 20)
         </p>
 
         <Form>
           <Form.Field inline style={{ height: "50px" }}>
-            <label style={{ color:"#003152", fontSize: "18px" }}>Tokens to redeem: </label>
+            <label style={{ color: COLORS.menuBackground, fontSize: "18px" }}>
+              Tokens to redeem:{" "}
+            </label>
             <Input
               required
               focus
@@ -226,11 +254,16 @@ class Profile extends Component {
               }
             />
             <Button
-              style={{ height: "45px", fontSize: "15px", color:"#FFF", backgroundColor:"#003152" }}
+              icon="money"
+              content="Redeem"
+              style={{
+                height: "45px",
+                fontSize: "16px",
+                color: COLORS.menuText,
+                backgroundColor: COLORS.menuBackground
+              }}
               onClick={() => this.redeemTokens()}
-            >
-              Redeem
-            </Button>
+            />
           </Form.Field>
           <Message
             error
@@ -241,6 +274,7 @@ class Profile extends Component {
         </Form>
         <br />
         <br />
+        </Container>
       </Layout>
     );
   }

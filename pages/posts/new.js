@@ -6,6 +6,7 @@ import web3 from "../../ethereum/web3";
 import ipfs from "../../ethereum/ipfs";
 import { Router } from "../../routes";
 var swearjar = require("swearjar");
+import COLORS from "../../colors";
 
 class NewPost extends Component {
   state = {
@@ -112,9 +113,8 @@ class NewPost extends Component {
             content={this.state.errMessage}
           />
 
-          <Button loading={this.state.loading} primary>
-            Create Post
-          </Button>
+          <Button icon="edit" content="Create Post" loading={this.state.loading} style={{backgroundColor:COLORS.menuBackground, color:COLORS.menuText}} />
+
         </Form>
       </Layout>
     );

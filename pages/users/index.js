@@ -3,7 +3,8 @@ import Layout from "../../components/Layout";
 import social from "../../ethereum/social";
 import web3 from "../../ethereum/web3";
 import Link from "../../routes";
-import { List, Icon } from "semantic-ui-react";
+import { List, Icon, Container } from "semantic-ui-react";
+import COLORS from "../../colors";
 
 class UserIndex extends Component {
   state = {
@@ -36,8 +37,10 @@ class UserIndex extends Component {
           style={{
             borderRadius: "10px",
             marginBottom: "10px",
-            backgroundColor: "#81D8D0",
-            padding: "20px"
+            backgroundColor: COLORS.divBackground,
+            padding: "20px",
+            border: "2px solid",
+            borderColor: COLORS.menuBackground
           }}
         >
           <List.Icon name="user circle" size="huge" />
@@ -53,7 +56,7 @@ class UserIndex extends Component {
               {user.name}
             </List.Header>
             <List.Description
-              style={{ fontSize: "16px", marginLeft: "5px", color: "#003152" }}
+              style={{ fontSize: "16px", marginLeft: "5px", color: COLORS.menuBackground }}
             >
               <div>
                 <p>{user.uadd}</p>
@@ -69,8 +72,10 @@ class UserIndex extends Component {
   render() {
     return (
       <Layout>
+        <Container>
         <h2>Users</h2>
         <List>{this.getUsers()}</List>
+        </Container>
       </Layout>
     );
   }
