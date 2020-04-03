@@ -143,6 +143,7 @@ class SocialIndex extends Component {
 
   renderPosts = async () => {
     const posts = this.state.posts;
+    console.log(this.state.postCount);
 
     const items = await Promise.all(
       posts.map(async (post, index) => {

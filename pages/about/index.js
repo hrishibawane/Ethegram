@@ -19,6 +19,7 @@ import COLORS from "../../colors";
 
 class About extends Component {
 
+
   render() {
     return (
       <div style={{ margin: "0px", backgroundColor: COLORS.menuBackground }}>
@@ -119,19 +120,21 @@ class About extends Component {
           <center>
             <div
               style={{
-                marginTop: "210px",
+                marginTop: "180px",
                 top: "0px",
                 bottom: "0px",
                 left: "0px",
                 right: "0px",
-                position: "absolute"
+                position: "absolute",
+                color:COLORS.menuText
               }}
             >
-              
+
+              <Icon size="massive" name="code" />
               <h1
                 style={{
                   fontFamily: "Noto Sans",
-                  fontSize: "100px",
+                  fontSize: "90px",
                   color: COLORS.menuText
                 }}
               >
@@ -140,7 +143,6 @@ class About extends Component {
               <p style={{ fontSize: "50px", color: COLORS.menuText }}>
                 The Decentralized Social Network
               </p>
-              <br />
               <br />
               <br />
               <br />

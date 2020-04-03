@@ -50,7 +50,6 @@ class ChatRoom extends Component {
               margin: "5px",
               padding: "10px",
               paddingRight: "50px",
-              backgroundColor: COLORS.white,
               borderRadius: "10px",
               color: COLORS.menuBackground
             }}
