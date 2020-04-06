@@ -28,7 +28,7 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/posts/new": [
+    "/users": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

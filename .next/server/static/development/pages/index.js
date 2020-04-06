@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -686,8 +686,8 @@ const ipfs = new IPFS({
   port: 5001,
   protocol: 'https'
 }); //run with local daemon
-// const ipfsApi = require(‘ipfs-api’);
-// const ipfs = new ipfsApi(‘localhost’, ‘5001’, {protocol:‘http’});
+// const ipfsApi = require('ipfs-api');
+// const ipfs = new ipfsApi('localhost', '5001', {protocol:'http'});
 
 /* harmony default export */ __webpack_exports__["default"] = (ipfs);
 
@@ -728,15 +728,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! web3 */ "web3");
 /* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(web3__WEBPACK_IMPORTED_MODULE_0__);
 
-let web3; // if on server or browser
+let provider; // if on server or browser
 
 if (false) {} else {
   // we are on server OR metamask not present
-  const provider = new web3__WEBPACK_IMPORTED_MODULE_0___default.a.providers.HttpProvider('https://rinkeby.infura.io/v3/790b4e6eec7d467caacc619e21365f7d');
-  web3 = new web3__WEBPACK_IMPORTED_MODULE_0___default.a(provider);
+  provider = new web3__WEBPACK_IMPORTED_MODULE_0___default.a.providers.HttpProvider('https://rinkeby.infura.io/v3/790b4e6eec7d467caacc619e21365f7d');
 } // "test": "echo \"Error: no test specified\" && exit 1",
 
 
+const web3 = new web3__WEBPACK_IMPORTED_MODULE_0___default.a(provider);
 /* harmony default export */ __webpack_exports__["default"] = (web3);
 
 /***/ }),
@@ -1396,7 +1396,7 @@ module.exports = routes;
 
 /***/ }),
 
-/***/ 3:
+/***/ 5:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
