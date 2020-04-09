@@ -28,7 +28,7 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/users": [
+    "/profile": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

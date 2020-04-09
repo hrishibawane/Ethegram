@@ -1,5 +1,6 @@
 pragma solidity >=0.4.17;
 
+
 contract Social {
     struct User {
         string name;
@@ -19,6 +20,7 @@ contract Social {
         mapping(address => bool) likedBy;
         // edit
         string comments;
+        bool valid;
     }
 
     Post[] public posts;
@@ -27,7 +29,6 @@ contract Social {
     uint256 public userCount;
     User[] public peeps;
     string public chatHash;
-
 
     constructor() public {
         manager = msg.sender;
@@ -47,7 +48,8 @@ contract Social {
             likes: 0,
             owner: msg.sender,
             timestamp: timestamp,
-            comments: ""
+            comments: "",
+            valid: true
         });
 
         posts.push(newPost);
@@ -66,7 +68,10 @@ contract Social {
 
     function likePost(uint256 index) public {
         Post storage currPost = posts[index];
-        require(!currPost.likedBy[msg.sender], "You have already liked this post!");
+        require(
+            !currPost.likedBy[msg.sender],
+            "You have already liked this post!"
+        );
         require(msg.sender != currPost.owner, "You cannot like your own post!");
 
         currPost.likedBy[msg.sender] = true;
@@ -80,7 +85,11 @@ contract Social {
                 break;
             }
         }
+    }
 
+    function deletePost(uint256 index) public {
+        Post storage currPost = posts[index];
+        currPost.valid = false;
     }
 
     function signIn(string memory name) public payable {
@@ -95,7 +104,6 @@ contract Social {
             postsCount: 0
         });
         peeps.push(newUser);
-
     }
 
     function isUser(address user) public view returns (bool) {
@@ -110,7 +118,11 @@ contract Social {
         currPost.comments = curr;
     }
 
-    function getUserDetails(address addr) public view returns (string memory, uint256, uint256, uint256) {
+    function getUserDetails(address addr)
+        public
+        view
+        returns (string memory, uint256, uint256, uint256)
+    {
         for (uint256 i = 0; i < peeps.length; i++) {
             if (peeps[i].uadd == addr) {
                 User storage user = peeps[i];
@@ -134,7 +146,6 @@ contract Social {
                 break;
             }
         }
-
     }
 
     function setChatHash(string memory chash) public {

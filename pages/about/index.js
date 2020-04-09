@@ -10,7 +10,7 @@ import {
   Icon,
   Grid,
   Container,
-  List
+  List,
 } from "semantic-ui-react";
 import Head from "next/head";
 import Header from "../../components/Header";
@@ -18,8 +18,6 @@ import { Link } from "../../routes";
 import COLORS from "../../colors";
 
 class About extends Component {
-
-
   render() {
     return (
       <div style={{ margin: "0px", backgroundColor: COLORS.menuBackground }}>
@@ -28,8 +26,10 @@ class About extends Component {
             rel="stylesheet"
             href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
           />
-          <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
+          <link
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"
+          />
         </Head>
         <div
           style={{
@@ -37,7 +37,7 @@ class About extends Component {
             paddingTop: "35px",
             backgroundColor: COLORS.menuBackground,
             position: "absolute",
-            left: "10px"
+            left: "10px",
           }}
         >
           <Link route="/">
@@ -54,7 +54,7 @@ class About extends Component {
             padding: "20px",
             backgroundColor: COLORS.menuBackground,
             position: "absolute",
-            right: "10px"
+            right: "10px",
           }}
         >
           <Dropdown
@@ -66,7 +66,7 @@ class About extends Component {
             style={{
               backgroundColor: COLORS.menuBackground,
               color: COLORS.menuText,
-              fontSize: "20px"
+              fontSize: "20px",
             }}
           >
             <Dropdown.Menu
@@ -74,7 +74,7 @@ class About extends Component {
                 width: "200px",
                 borderColor: COLORS.menuBackground,
                 borderWidth: "2px",
-                backgroundColor: COLORS.ddbackground
+                backgroundColor: COLORS.ddbackground,
               }}
             >
               <Dropdown.Item className="item">
@@ -114,7 +114,7 @@ class About extends Component {
             backgroundColor: COLORS.menuBackground,
             width: "100%",
             height: "102vh",
-            margin: "0px"
+            margin: "0px",
           }}
         >
           <center>
@@ -126,16 +126,15 @@ class About extends Component {
                 left: "0px",
                 right: "0px",
                 position: "absolute",
-                color:COLORS.menuText
+                color: COLORS.menuText,
               }}
             >
-
               <Icon size="massive" name="code" />
               <h1
                 style={{
                   fontFamily: "Noto Sans",
                   fontSize: "90px",
-                  color: COLORS.menuText
+                  color: COLORS.menuText,
                 }}
               >
                 ETHEGRAM
@@ -152,11 +151,12 @@ class About extends Component {
                 <p style={{ fontSize: "20px", color: COLORS.menuText }}>
                   Ethegram is a Decentralized Application based Social Network
                   created on Ethereum Blockchain. It uses Inter-Planetary File
-                  System (IPFS) for storing large files like images. You can
-                  post articles, blogs, images, etc. and you will be rewarded
-                  based on the upvotes your posts get. The rewards are in the
-                  form of Gram Tokens (GTok). You can redeem these tokens from
-                  this platform itself into real Ether.
+                  System (IPFS) for storing large files like images and videos.
+                  You can post articles, blogs, images, videos, etc. and view
+                  them at a very low latency. You will be rewarded based on the
+                  upvotes your posts get. The rewards are in the form of Gram
+                  Tokens (GTok). You can redeem these tokens on this platform
+                  itself into real Ether.
                 </p>
                 <p style={{ fontSize: "20px", color: COLORS.menuText }}>
                   Ethegram is a completely safe and secure Decentralized
@@ -169,27 +169,25 @@ class About extends Component {
         </div>
         <div>
           <Grid>
-
-
             <Grid.Column
               width={6}
               style={{
                 borderRadius: "20px",
                 backgroundColor: COLORS.divBackground,
                 color: COLORS.menuBackground,
-                padding: "30px"
+                padding: "30px",
               }}
             >
-              <p style={{ fontSize: "40px", float:"right" }}>Creators</p>
+              <p style={{ fontSize: "40px", float: "right" }}>Creators</p>
               <br />
               <br />
-              <br/>
-              <br/>
+              <br />
+              <br />
               <List inverted size="huge" relaxed floated="right">
-                <List.Item >
+                <List.Item>
                   <Image
                     avatar
-                    src="https://react.semantic-ui.com/images/avatar/small/christian.jpg"
+                    src="https://avatars0.githubusercontent.com/u/23273469?s=460&u=1bf613c4e5bd4199a4844e0fc0bea151c068fec1&v=4"
                   />
                   <List.Content>
                     <List.Header
@@ -201,7 +199,7 @@ class About extends Component {
                       <a
                         style={{
                           color: COLORS.menuBackground,
-                          fontSize: "15px"
+                          fontSize: "15px",
                         }}
                         href="https://github.com/hrishibawane"
                         target="_blank"
@@ -214,7 +212,7 @@ class About extends Component {
                 <List.Item>
                   <Image
                     avatar
-                    src="https://react.semantic-ui.com/images/avatar/small/jenny.jpg"
+                    src="https://avatars0.githubusercontent.com/u/41316054?s=460&v=4"
                   />
                   <List.Content>
                     <List.Header
@@ -226,7 +224,7 @@ class About extends Component {
                       <a
                         style={{
                           color: COLORS.menuBackground,
-                          fontSize: "15px"
+                          fontSize: "15px",
                         }}
                         href="https://github.com/Tanyashinde"
                         target="_blank"
@@ -239,7 +237,7 @@ class About extends Component {
                 <List.Item>
                   <Image
                     avatar
-                    src="https://react.semantic-ui.com/images/avatar/small/tom.jpg"
+                    src="https://avatars0.githubusercontent.com/u/15326939?s=460&u=3556f175182b4115d9bb498e2a607aa6d0b5d2b8&v=4"
                   />
                   <List.Content>
                     <List.Header
@@ -251,7 +249,7 @@ class About extends Component {
                       <a
                         style={{
                           color: COLORS.menuBackground,
-                          fontSize: "15px"
+                          fontSize: "15px",
                         }}
                         href="https://github.com/budukhyash"
                         target="_blank"
@@ -276,7 +274,7 @@ class About extends Component {
                       <a
                         style={{
                           color: COLORS.menuBackground,
-                          fontSize: "15px"
+                          fontSize: "15px",
                         }}
                         href="https://github.com/akadam"
                         target="_blank"
@@ -297,14 +295,17 @@ class About extends Component {
                 borderRadius: "20px",
                 backgroundColor: COLORS.divBackground,
                 color: COLORS.menuBackground,
-                padding: "30px"
+                padding: "30px",
               }}
             >
               <p style={{ fontSize: "40px" }}>Features</p>
-              
+
               <ul style={{ marginTop: "2px" }}>
                 <li style={{ fontSize: "20px", margin: "8px" }}>
                   Easy to get started
+                </li>
+                <li style={{ fontSize: "20px", margin: "8px" }}>
+                  Upload and view media content in a fast and timely manner
                 </li>
                 <li style={{ fontSize: "20px", margin: "8px" }}>
                   Earn rewards for your own content
@@ -317,7 +318,6 @@ class About extends Component {
                 </li>
               </ul>
             </Grid.Column>
-            
           </Grid>
         </div>
         <br />
@@ -335,4 +335,3 @@ export default About;
 // Simple Tokenomics
 // Ethereum Blockchain based storage
 // IPFS for large file storage
-

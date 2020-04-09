@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import Layout from "../../components/Layout";
 import social from "../../ethereum/social";
 import web3 from "../../ethereum/web3";
-import Link from "../../routes";
+import {Link} from "../../routes";
 import { List, Icon, Container } from "semantic-ui-react";
 import COLORS from "../../colors";
 
 class UserIndex extends Component {
   state = {
-    users: []
+    users: [],
+    userList: []
   };
 
   async componentDidMount() {
@@ -23,10 +24,11 @@ class UserIndex extends Component {
     );
     console.log(users);
     this.setState({ users: users });
+    this.getUsers();
   }
 
   getUsers = () => {
-    return this.state.users.map((user, index) => {
+    const userList = this.state.users.map((user, index) => {
       let score = 0;
       if (user.postsCount != 0) {
         score = user.tokens / user.postsCount;
@@ -37,7 +39,7 @@ class UserIndex extends Component {
           style={{
             borderRadius: "10px",
             marginBottom: "10px",
-            backgroundColor: COLORS.divBackground,
+            // backgroundColor: COLORS.divBackground,
             padding: "20px",
             border: "2px solid",
             borderColor: COLORS.menuBackground
@@ -53,7 +55,10 @@ class UserIndex extends Component {
                 color: "#003152"
               }}
             >
-              {user.name}
+              {/* {user.name} */}
+              <Link route={`/users/${user.uadd}`}>
+                <a>{user.name}</a>
+              </Link>
             </List.Header>
             <List.Description
               style={{ fontSize: "16px", marginLeft: "5px", color: COLORS.menuBackground }}
@@ -67,6 +72,8 @@ class UserIndex extends Component {
         </List.Item>
       );
     });
+
+    this.setState({ userList: userList });
   };
 
   render() {
@@ -74,7 +81,7 @@ class UserIndex extends Component {
       <Layout>
         <Container>
         <h2>Users</h2>
-        <List>{this.getUsers()}</List>
+        <List>{this.state.userList}</List>
         </Container>
       </Layout>
     );

@@ -1,11 +1,11 @@
 const COLORS = {
     white: '#fff',
     black: '#000',
-    menuBackground: '#1f2833',
-    menuText: '#66fcf1',
-    divBackground: '#45a29e',
+    menuBackground: '#062f4f',
+    menuText: '#fff',
+    divBackground: '#286da8',
     layoutBackground: '#fff',
-    ddbackground: '#394863',
+    ddbackground: '#286da8',
     background: '#f0f0f1'
 }
 

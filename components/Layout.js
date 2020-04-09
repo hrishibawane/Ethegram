@@ -36,8 +36,10 @@ export default props => {
         {props.children}
         <br />
         <br />
+
       </div>
       <Footer />
+      
     </div>
   );
 };

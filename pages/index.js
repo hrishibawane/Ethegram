@@ -8,7 +8,9 @@ import {
   Modal,
   Header,
   List,
-  Input
+  Input,
+  Container,
+  Step
 } from "semantic-ui-react";
 import Layout from "../components/Layout";
 import social from "../ethereum/social";
@@ -16,6 +18,9 @@ import web3 from "../ethereum/web3";
 import { Link, Router } from "../routes";
 import ipfs from "../ethereum/ipfs";
 import COLORS from "../colors";
+import ReactPlayer from "react-player";
+import styled from "styled-components";
+import { CustButton } from "../components/styledComponents";
 const NewsAPI = require("newsapi");
 const newsapi = new NewsAPI("9596f3ac23f5400a981fa2a3e2f8411b");
 
@@ -35,26 +40,15 @@ class SocialIndex extends Component {
     done: false,
     modal: false,
     articles: [],
-    news: []
-  };
-
-  onSubmit = async index => {
-    console.log(index);
-    const accs = await web3.eth.getAccounts();
-
-    var str = this.state.username + ": " + this.state.newComment;
-    console.log(str);
-    try {
-      await social.methods.postComment(index, str).send({ from: accs[0] });
-      console.log("Comment Posted by " + accs[0]);
-      this.setState({ caption: "" });
-    } catch (err) {
-      console.log(err.message);
-    }
+    news: [],
+    userbalance: 0
   };
 
   async componentDidMount() {
     const accs = await web3.eth.getAccounts();
+    let userbalance = await web3.eth.getBalance(accs[0]);
+    userbalance = web3.utils.fromWei(userbalance, "ether");
+    userbalance = parseFloat(userbalance).toFixed(4);
     const isUser = await social.methods.isUser(accs[0]).call();
     const userDetails = await social.methods.getUserDetails(accs[0]).call();
     const username = userDetails[0];
@@ -63,11 +57,13 @@ class SocialIndex extends Component {
     balance = web3.utils.fromWei(balance, "ether");
     console.log(accs[0], username);
     console.log("Balance: " + balance);
+    console.log("user bal: " + userbalance);
 
     this.setState({
       disabled: isUser,
       currAccount: accs[0],
-      username: username
+      username: username,
+      userbalance: userbalance
     });
 
     const postCount = await social.methods.getPostsCount().call();
@@ -95,6 +91,22 @@ class SocialIndex extends Component {
       });
   }
 
+  onSubmit = async index => {
+    console.log(index);
+    const accs = await web3.eth.getAccounts();
+
+    var str = this.state.username + ": " + this.state.newComment;
+    console.log(str);
+    try {
+      await social.methods.postComment(index, str).send({ from: accs[0] });
+      console.log("Comment Posted by " + accs[0]);
+      this.setState({ caption: "" });
+      Router.pushRoute('/');
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   likePost = async index => {
     console.log(index);
 
@@ -105,15 +117,6 @@ class SocialIndex extends Component {
       this.setState({ done: true });
     } catch (err) {}
   };
-
-  uint8ToBase64(buffer) {
-    var binary = "";
-    var bytes = [].slice.call(new Uint8Array(buffer));
-
-    bytes.forEach(b => (binary += String.fromCharCode(b)));
-
-    return window.btoa(binary);
-  }
 
   signIn = async () => {
     this.setState({ loading: true });
@@ -147,15 +150,27 @@ class SocialIndex extends Component {
 
     const items = await Promise.all(
       posts.map(async (post, index) => {
-        const name = await social.methods.getUserDetails(post.owner).call();
-        let src;
-        if (post.imgIpfsHash.length > 0) {
-          const data = await ipfs.files.get(post.imgIpfsHash);
-          const bpic = this.uint8ToBase64(data[0].content);
-          src = "data:image/png;base64," + bpic;
-        } else {
-          src = null;
+        if (!post.valid) {
+          return {
+            key: index,
+          };
         }
+        const name = await social.methods.getUserDetails(post.owner).call();
+        let imgSrc = null, vidSrc = null;
+        if (post.imgIpfsHash.length > 0) {
+          let hash = post.imgIpfsHash;
+          let type = hash[0];
+          hash = hash.slice(1, hash.length);
+
+          if(type=="0") {
+            imgSrc = "https://ipfs.io/ipfs/" + hash;
+          }
+          else {
+            vidSrc = "https://ipfs.io/ipfs/" + hash;
+          }
+        }
+
+        console.log(post.imgIpfsHash);
 
         return {
           key: index,
@@ -175,9 +190,18 @@ class SocialIndex extends Component {
               </p>
               <Image
                 style={{ padding: "20px" }}
-                hidden={src == null}
-                src={src}
+                hidden={imgSrc == null}
+                src={imgSrc}
                 fluid
+              />
+              <ReactPlayer 
+                style={{ padding: "20px", borderTop: "1px solid", borderColor: "grey"}}
+                hidden={vidSrc == null}
+                url={vidSrc}
+                controls={true}
+                // light="https://www.thejobconnection.org/wp-content/uploads/2019/05/Video-Arrow-overlay.png"
+                width="100%"
+                height="100%"
               />
             </div>
           ),
@@ -186,6 +210,7 @@ class SocialIndex extends Component {
               <Form onSubmit={() => this.onSubmit(index)}>
                 <Form.Field inline>
                   <Input
+                    required
                     focus
                     placeholder="Add a comment..."
                     value={this.state.caption}
@@ -194,7 +219,7 @@ class SocialIndex extends Component {
                     }
                     style={{ width: "70%", height: "40px", marginRight: "0px" }}
                   />
-                  <Button
+                  <CustButton
                     size="small"
                     color="linkedin"
                     content="Post Comment"
@@ -204,7 +229,7 @@ class SocialIndex extends Component {
                 </Form.Field>
               </Form>
               <br></br>
-              <Button
+              <CustButton
                 onClick={() => this.likePost(index)}
                 color="red"
                 content="Like"
@@ -214,7 +239,7 @@ class SocialIndex extends Component {
               />
               <Modal
                 trigger={
-                  <Button
+                  <CustButton
                     size="medium"
                     color="facebook"
                     content="View Comments"
@@ -229,7 +254,7 @@ class SocialIndex extends Component {
                   <List divided items={post.comments.split("/")}></List>
                 </Modal.Content>
                 <Modal.Actions>
-                  <Button
+                  <CustButton
                     color="red"
                     content="Close"
                     icon="close"
@@ -251,17 +276,46 @@ class SocialIndex extends Component {
   render() {
     return (
       <Layout>
+        <Step.Group ordered fluid>
+          <Step completed={this.state.currAccount}>
+            <Step.Content>
+              <Step.Title>Metamask Login</Step.Title>
+              <Step.Description>Login to your Metamask Account</Step.Description>
+            </Step.Content>
+          </Step>
+          <Step completed={this.state.userbalance > 2}>
+            <Step.Content>
+              <Step.Title>Request Ethers</Step.Title>
+              <Step.Description>
+                Request ether in your account, if required, from <a href="https://faucet.rinkeby.io/" target="_blank">here</a>
+              </Step.Description>
+            </Step.Content>
+          </Step>
+          <Step completed={this.state.disabled}>
+            <Step.Content>
+              <Step.Title>Ethegram One-Time Signup</Step.Title>
+              <Step.Description>Signup to the Ethegram Platform</Step.Description>
+            </Step.Content>
+          </Step>
+          <Step>
+            <Step.Content>
+              <Step.Title>Welcome to Ethegram!!!</Step.Title>
+              <Step.Description>You are ready to go...</Step.Description>
+            </Step.Content>
+          </Step>
+        </Step.Group>
+
         <h2>Posts</h2>
         <Grid>
-          <Grid.Column width={11} style={{ marginRight:"10px", paddingRight: "20px" }}>
+          <Grid.Column width={11}>
             <Card.Group centered items={this.state.items} />
           </Grid.Column>
 
           <Grid.Column
-            width={4}
+            width={5}
             textAlign="left"
             style={{
-              marginLeft: "40px",
+              // marginRight: "10px",
               marginTop: "15px",
               border: "1px solid #A9A9A9",
               borderRadius: "5px",
@@ -271,15 +325,16 @@ class SocialIndex extends Component {
             <Form style={{backgroundColor: COLORS.background, padding:"10px", border: "1px solid #A9A9A9"}}>
               <label><h4 style={{color:COLORS.menuBackground}}>Name:</h4></label>
               <Form.Input
+                required
                 style={{ marginTop:"5px" }}
                 disabled={this.state.disabled}
                 fluid
                 value={this.state.name}
                 onChange={event => this.setState({ name: event.target.value })}
               />
-              <Button
+              <CustButton
                 size="medium"
-                content="Sign In"
+                content="Sign Up"
                 onClick={this.signIn}
                 style={{
                   backgroundColor: COLORS.menuBackground,
@@ -298,15 +353,11 @@ class SocialIndex extends Component {
             <br />
             <Link route="/posts/new">
               <a>
-                <Button
+                <CustButton
                   content="Create New Post"
                   size="medium"
-                  style={{
-                    backgroundColor: COLORS.menuBackground,
-                    color: COLORS.menuText,
-                    width: "100%"
-                  }}
                   disabled={!this.state.disabled}
+                  style={{ backgroundColor: COLORS.menuBackground, color: COLORS.menuText, width: "100%" }}
                 />
               </a>
             </Link>
@@ -320,9 +371,11 @@ class SocialIndex extends Component {
             <Card.Group items={this.state.news} />
           </Grid.Column>
         </Grid>
+        
       </Layout>
     );
   }
 }
+
 
 export default SocialIndex;
